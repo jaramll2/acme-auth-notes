@@ -16,6 +16,12 @@ const User = conn.define('user', {
   password: STRING
 });
 
+const Note = conn.define('note',{
+  text: Sequelize.TEXT
+});
+
+Note.belongsTo(User);
+
 User.addHook('beforeSave', async(user)=> {
   if(user.changed('password')){
     const hashed = await bcrypt.hash(user.password, 3);
@@ -69,6 +75,18 @@ const syncAndSeed = async()=> {
   const [lucy, moe, larry] = await Promise.all(
     credentials.map( credential => User.create(credential))
   );
+
+  await Promise.all([
+    Note.create({text: '“I knew you’d linger like a tattoo kiss. I knew you’d haunt all of my what ifs.”',userId: lucy.id}),
+    Note.create({text: '“To live for the hope of it all, cancel plans just in case you’d call.”', userId: lucy.id}),
+    Note.create({text: '“If I’m dead to you why are you at the wake?”', userId: lucy.id}),
+    Note.create({text: '“And women like hunting witches too, doing your dirtiest work for you.”', userId: lucy.id}),
+    Note.create({text: '“Your faithless love’s the only hoax I believe in.”', userId: larry.id}),
+    Note.create({text: '“In my defense, I have none, for never leaving well enough alone.”', userId: larry.id}),
+    Note.create({text: '“I can go anywhere I want. Anywhere I want, just not home.”', userId: larry.id}),
+    Note.create({text: '“When I felt like I was an old cardigan under someone’s bed, you put me on and said I was your favorite.”', userId: moe.id})
+  ]);
+
   return {
     users: {
       lucy,
@@ -81,6 +99,7 @@ const syncAndSeed = async()=> {
 module.exports = {
   syncAndSeed,
   models: {
-    User
+    User,
+    Note
   }
 };

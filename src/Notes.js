@@ -2,15 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const Notes = ()=> {
+const Notes = ({notes})=> {
+  console.log(notes);
   return (
     <div>
       <Link to='/home'>Home</Link>
       <div>
-        TODO - Ability of User to manage notes
+        {
+          notes.map( note=>{
+            return(
+              <div key={note.id}>
+                {note.text}
+              </div>
+            )
+          })
+        }
       </div>
     </div>
   );
 };
 
-export default connect()(Notes);
+export default connect(state=>state)(Notes);

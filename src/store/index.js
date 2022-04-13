@@ -4,6 +4,9 @@ import logger from 'redux-logger';
 import axios from 'axios';
 
 const notes = (state = [], action)=> {
+  if(action.type === 'SET_NOTES'){
+    return action.notes;
+  }
   return state;
 };
 
@@ -44,6 +47,24 @@ const attemptLogin = ()=> {
   }
 }
 
+const fetchNotes = ()=>{
+  return async(dispatch)=>{
+    const token = window.localStorage.getItem('token');
+    if(token){
+      const notes = (await axios.get('/api/notes',{
+        headers: {
+          authorization: token
+        }
+      })).data;
+
+      dispatch({
+        type: 'SET_NOTES',
+        notes
+      });
+    }
+  }
+}
+
 const store = createStore(
   combineReducers({
     auth,
@@ -52,6 +73,6 @@ const store = createStore(
   applyMiddleware(thunk, logger)
 );
 
-export { attemptLogin, signIn, logout };
+export { attemptLogin, fetchNotes, signIn, logout };
 
 export default store;
