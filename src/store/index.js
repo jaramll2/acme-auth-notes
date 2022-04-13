@@ -7,6 +7,10 @@ const notes = (state = [], action)=> {
   if(action.type === 'SET_NOTES'){
     return action.notes;
   }
+  if(action.type === 'DELETE_NOTE'){
+    const notes = state.filter(_note=>_note.id !==action.note.id);
+    return notes;
+  }
   return state;
 };
 
@@ -65,6 +69,20 @@ const fetchNotes = ()=>{
   }
 }
 
+const deleteNote = (note)=>{
+  return async(dispatch)=>{
+
+    await axios.delete(`/api/notes/${note.id}`);
+
+    dispatch(
+      {
+        type: 'DELETE_NOTE',
+        note
+      }
+    );
+  }
+}
+
 const store = createStore(
   combineReducers({
     auth,
@@ -73,6 +91,6 @@ const store = createStore(
   applyMiddleware(thunk, logger)
 );
 
-export { attemptLogin, fetchNotes, signIn, logout };
+export { attemptLogin, fetchNotes, deleteNote, signIn, logout };
 
 export default store;

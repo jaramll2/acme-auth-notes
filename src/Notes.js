@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { deleteNote } from './store';
 
-const Notes = ({notes})=> {
-  console.log(notes);
+const Notes = (props)=> {
+  const notes = props.notes;
+
+  console.log(typeof notes);
   return (
     <div>
       <Link to='/home'>Home</Link>
@@ -12,7 +15,7 @@ const Notes = ({notes})=> {
           notes.map( note=>{
             return(
               <div key={note.id}>
-                {note.text}
+                {note.text} <button onClick={()=> props.deleteNote(note)} >x</button>
               </div>
             )
           })
@@ -22,4 +25,12 @@ const Notes = ({notes})=> {
   );
 };
 
-export default connect(state=>state)(Notes);
+const mapDispatchToProps = (dispatch)=>{
+  return{
+      deleteNote: (note)=>{
+          dispatch(deleteNote(note));
+      }
+  }
+}
+
+export default connect(state=>state,mapDispatchToProps)(Notes);

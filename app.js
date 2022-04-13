@@ -31,11 +31,24 @@ app.get('/api/notes', async(req, res, next)=> {
     const user = await User.byToken(req.headers.authorization);
     
     const notes = await Note.findAll({where: {userId: user.id}});
-    
+
     res.send(notes);
   }
   catch(ex){
     next(ex);
+  }
+});
+
+app.delete('/api/notes/:id',async(req,res,next)=>{
+  try{
+      const note = await Note.findByPk(req.params.id);
+      
+      await note.destroy();
+      res.sendStatus(204);
+      
+  }
+  catch(err){
+      next(err);
   }
 });
 
