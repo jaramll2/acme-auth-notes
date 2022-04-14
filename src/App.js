@@ -23,9 +23,6 @@ class App extends React.Component{
     const { auth } = this.props;
     const { notes } = this.props;
 
-    console.log(notes);
-    console.log(auth);
-
     if(!auth.id){
       return (
         <Switch>

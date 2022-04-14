@@ -52,6 +52,17 @@ app.delete('/api/notes/:id',async(req,res,next)=>{
   }
 });
 
+app.post('/api/notes',async(req,res,next)=>{
+  try{
+      const newNote = await Note.create({text: req.body.text});
+      res.status(201).send(newNote);
+  }
+  catch(err){
+      next(err);
+  }
+});
+
+
 app.use((err, req, res, next)=> {
   console.log(err);
   res.status(err.status || 500).send({ error: err.message });

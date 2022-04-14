@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { deleteNote } from './store';
+import NotesForm from './NotesForm';
 
 const Notes = (props)=> {
   const notes = props.notes;
-
-  console.log(typeof notes);
+  
   return (
     <div>
       <Link to='/home'>Home</Link>
@@ -21,6 +21,8 @@ const Notes = (props)=> {
           })
         }
       </div>
+
+      <NotesForm id={props.auth.id}/>
     </div>
   );
 };
